@@ -77,23 +77,47 @@ public:
 
 	void print_main(void)
 	{
+		//시분초가 2자리수가 아니면 오른쪽 막는 글자가 땡겨져온다.
+		string h, m, s;
+		h.clear();
+		m.clear();
+		s.clear();
+		if (f_hour < 10) {
+			h += ' ';
+		}
+		h += to_string(f_hour);
+		if (f_min < 10) {
+			m += ' ';
+		}
+		m += to_string(f_min);
+		if (f_sec < 10) {
+			s += ' ';
+		}
+		s += to_string(f_sec);
+
+
 		system("cls");
-		cout << "공부 시작시간 : ";
-		cout << f_hour << "시 " << f_min << "분 " << f_sec << "초" << endl;
-		cout << "1. 공부할 것 리스트" << endl;
-		cout << "2. 공부한 것 타임라인 추가" << endl;
-		cout << (timestop ? "3. 재개" : "3. 중단") << endl;
-		cout << "4. 타임라인" << endl;
-		cout << "5. 저장" << endl;
-		cout << "0. 종료" << endl;
-		cout << "-------------------------------" << endl;
-		cout << "입력하세요 : ";
+		cout << "        ┌───────────────────────────────┐" << endl;
+		cout << "        │ 공부 시작시간 : ";
+		cout << h << "시 " << m << "분 " << s << "초" << "│" <<  endl;
+		cout << "        │ 1. 공부할 것 리스트           │" << endl;
+		cout << "        │ 2. 공부한 것 타임라인 추가    │" << endl;
+		cout << "        │ " << (timestop ? "3. 재개" : "3. 중단")  << "                       │ "<< endl;
+		cout << "        │ 4. 타임라인                   │" << endl;
+		cout << "        │ 5. 저장                       │" << endl;
+		cout << "        │ 0. 종료                       │" << endl;
+		cout << "        └───────────────────────────────┘" << endl;
+		cout << "                 입력하세요 : ";
 	}
 
 	bool menu(void) {
 		print_main();
 		int select;
-		cin >> select;
+		if (!(cin >> select)) {
+			cin.clear();
+			clearInputBuffer();
+			select = 99;
+		};
 
 		if (timestop && select == stop) {
 			select = resume;
@@ -155,9 +179,9 @@ public:
 			break;
 		default:
 			cout << "잘못된 입력" << endl;
+			system("pause");
 			break;
 		}
-
 		return true;
 	}
 	void input_studylist(void) {
@@ -380,6 +404,8 @@ void ast(psscc* p) { // autosavethread CBV로 하면 맨 처음 값을 가지고
 }//sleep(10000) 하는 방법도 있지만 system이 끝날때 바로 thread 를 끝내지 않으면 asortcall error가 난다. 
 //이렇게 하면 전역변수를 썼다는 단점은 있지만 그 에러를 방지하면서 0.1초 씩은 cpu가 쉬고 
 //thread도 0.1초만에 끝낼 수 있다. 
+
+
 
 void process() {
 	version_info();
